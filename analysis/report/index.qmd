@@ -1,0 +1,13 @@
+---
+title: "Blog under construction"
+author: "Ronald G. Thomas"
+date: "2026-08-28"
+description: >
+  This blog is being rebuilt. New posts are coming soon.
+format:
+  html:
+    code-fold: false
+draft: false
+---
+
+Blog under construction.
