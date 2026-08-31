@@ -43,7 +43,15 @@ RUN echo 'options(repos = c(CRAN = "https://packagemanager.posit.co/cran/__linux
         >> /usr/local/lib/R/etc/Rprofile.site
 
 # Install pandoc for document rendering
-RUN apt-get update && apt-get install -y --no-install-recommends pandoc && rm -rf /var/lib/apt/lists/*
+RUN apt-get update && apt-get install -y --no-install-recommends pandoc wget gdebi-core && rm -rf /var/lib/apt/lists/*
+
+# Install Quarto from official binary (not in standard repositories); the
+# CI render step shells out to 'quarto render', which the base image lacks.
+ARG QUARTO_VERSION=1.6.43
+RUN set -ex && \
+    wget -q "https://github.com/quarto-dev/quarto-cli/releases/download/v${QUARTO_VERSION}/quarto-${QUARTO_VERSION}-linux-amd64.deb" && \
+    gdebi -n "quarto-${QUARTO_VERSION}-linux-amd64.deb" && \
+    rm "quarto-${QUARTO_VERSION}-linux-amd64.deb"
 
 # Install R dev tooling only (languageserver/styler/lintr, config-gated;
 # never in renv.lock). Project packages come from renv::restore(), not here.
